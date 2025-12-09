@@ -1,0 +1,13 @@
+{
+  "name": "xuzhou-travel-memories",
+  "version": "1.0.0",
+  "description": "徐州旅游记忆网站",
+  "main": "index.js",
+  "scripts": {
+    "dev": "wrangler dev",
+    "deploy": "wrangler deploy"
+  },
+  "dependencies": {
+    "wrangler": "^3.0.0"
+  }
+}

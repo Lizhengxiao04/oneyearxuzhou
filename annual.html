@@ -435,15 +435,17 @@
             const travelRecordForm = document.getElementById('travel-record-form');
             const travelRecordsContainer = document.getElementById('travel-records');
             
-            // 从localStorage加载记录
+            // 从后端API加载记录
             function loadTravelRecords() {
-                try {
-                    const records = JSON.parse(localStorage.getItem('travelRecords')) || [];
-                    renderTravelRecords(records);
-                } catch (error) {
-                    console.error('加载游玩记录失败:', error);
-                    travelRecordsContainer.innerHTML = '<p class="text-red-400 text-center py-8">加载记录失败，请刷新页面重试</p>';
-                }
+                fetch('/api/records')
+                    .then(response => response.json())
+                    .then(records => {
+                        renderTravelRecords(records);
+                    })
+                    .catch(error => {
+                        console.error('加载游玩记录失败:', error);
+                        travelRecordsContainer.innerHTML = '<p class="text-red-400 text-center py-8">加载记录失败，请刷新页面重试</p>';
+                    });
             }
             
             // 渲染游玩记录
@@ -467,7 +469,7 @@
                                 <div class="flex-1">
                                     <h4 class="text-xl font-bold text-primary-blue mb-2">${record.location}</h4>
                                     <p class="text-gray-400 mb-4">${formatDateTime(record.date)}</p>
-                                    <button onclick="deleteTravelRecord(${index})" class="px-4 py-2 bg-red-500 text-white rounded-md hover:bg-red-600 transition-colors">删除记录</button>
+                                    <button onclick="deleteTravelRecord('${record.id}')" class="px-4 py-2 bg-red-500 text-white rounded-md hover:bg-red-600 transition-colors">删除记录</button>
                                 </div>
                             </div>
                         </div>
@@ -492,25 +494,23 @@
             }
             
             // 删除游玩记录
-            window.deleteTravelRecord = function(index) {
-                try {
-                    const records = JSON.parse(localStorage.getItem('travelRecords')) || [];
-                    
-                    // 释放URL对象以避免内存泄漏
-                    const recordToDelete = records[index];
-                    if (recordToDelete.image) {
-                        URL.revokeObjectURL(recordToDelete.image);
-                    }
-                    if (recordToDelete.video) {
-                        URL.revokeObjectURL(recordToDelete.video);
-                    }
-                    
-                    records.splice(index, 1);
-                    localStorage.setItem('travelRecords', JSON.stringify(records));
-                    loadTravelRecords();
-                } catch (error) {
-                    console.error('删除游玩记录失败:', error);
-                    alert('删除记录失败，请重试');
+            function deleteTravelRecord(recordId) {
+                if (confirm('确定要删除这条记录吗？')) {
+                    fetch(`/api/records/${recordId}`, {
+                        method: 'DELETE'
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            loadTravelRecords();
+                        } else {
+                            alert('删除记录失败: ' + data.error);
+                        }
+                    })
+                    .catch(error => {
+                        console.error('删除游玩记录失败:', error);
+                        alert('删除记录失败，请重试');
+                    });
                 }
             };
             
@@ -559,60 +559,49 @@
             travelRecordForm.addEventListener('submit', function(e) {
                 e.preventDefault();
                 
-                const location = document.getElementById('location').value;
-                const date = document.getElementById('date').value;
+                // 创建FormData对象
+                const formData = new FormData();
+                formData.append('location', document.getElementById('location').value);
+                formData.append('date', document.getElementById('date').value);
+                
+                // 添加图片文件
                 const imageFile = document.getElementById('image').files[0];
+                if (imageFile) {
+                    formData.append('image', imageFile);
+                }
+                
+                // 添加视频文件
                 const videoFile = document.getElementById('video').files[0];
-                
-                if (!location || !date) {
-                    alert('请填写地点和时间');
-                    return;
+                if (videoFile) {
+                    formData.append('video', videoFile);
                 }
                 
-                try {
-                    // 模拟保存到localStorage
-                    const records = JSON.parse(localStorage.getItem('travelRecords')) || [];
-                    
-                    // 检查localStorage是否有足够空间
-                    const newRecordSize = JSON.stringify({
-                        location: location,
-                        date: date,
-                        image: imageFile ? 'data:image/*;base64,...' : null,
-                        video: videoFile ? 'data:video/*;base64,...' : null
-                    }).length;
-                    
-                    const currentStorageSize = JSON.stringify(records).length;
-                    const estimatedTotalSize = currentStorageSize + newRecordSize;
-                    
-                    // localStorage通常有约5MB的限制
-                    if (estimatedTotalSize > 5 * 1024 * 1024) {
-                        alert('存储已满，请删除部分记录后再添加');
-                        return;
+                // 发送到后端API
+                fetch('/api/records', {
+                    method: 'POST',
+                    body: formData
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.error) {
+                        alert('保存记录失败: ' + data.error);
+                    } else {
+                        // 重置表单
+                        travelRecordForm.reset();
+                        
+                        // 清除自动保存数据
+                        localStorage.removeItem(autoSaveKey);
+                        
+                        // 重新加载记录
+                        loadTravelRecords();
+                        
+                        alert('记录保存成功！');
                     }
-                    
-                    // 创建记录对象
-                    const record = {
-                        location: location,
-                        date: date,
-                        image: imageFile ? URL.createObjectURL(imageFile) : null,
-                        video: videoFile ? URL.createObjectURL(videoFile) : null
-                    };
-                    
-                    records.push(record);
-                    localStorage.setItem('travelRecords', JSON.stringify(records));
-                    
-                    // 重置表单
-                    travelRecordForm.reset();
-                    
-                    // 清除自动保存数据
-                    localStorage.removeItem(autoSaveKey);
-                    
-                    // 重新加载记录
-                    loadTravelRecords();
-                } catch (error) {
+                })
+                .catch(error => {
                     console.error('保存游玩记录失败:', error);
-                    alert('保存记录失败，请重试');
-                }
+                    alert('保存记录失败，请检查网络连接或重试');
+                });
             });
             
             // 表单重置时清除自动保存数据
