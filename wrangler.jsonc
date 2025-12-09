@@ -3,25 +3,8 @@
   "main": "index.js",
   "compatibility_date": "2025-12-09",
   "assets": {
-    "directory": ".",
-    "binding": "ASSETS",
-    "include": [
-      "index.html",
-      "annual.html",
-      "assets/**"
-    ],
-    "exclude": [
-      "index.js",
-      "wrangler.jsonc",
-      "package.json",
-      "package-lock.json",
-      "deploy.sh",
-      "requirements.txt",
-      "app.py",
-      "travel_records.db",
-      "**/*.log",
-      "deploy/**"
-    ]
+    "directory": "public",
+    "binding": "ASSETS"
   },
   "kv_namespaces": [
     {
