@@ -26,6 +26,11 @@
 2. 确保服务器已配置支持静态文件访问
 3. 访问服务器 IP 或域名查看网站
 
+#### 方式三：Cloudflare Workers
+1. 确保已安装 Wrangler CLI：`npm install -g wrangler`
+2. 使用以下命令部署：`npx wrangler deploy --assets=.`
+3. 或使用配置文件部署：`npx wrangler deploy`（需要确保 wrangler.jsonc 配置正确）
+
 ## 项目结构
 ```
 .
