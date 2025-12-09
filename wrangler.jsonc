@@ -1,16 +1,28 @@
 {
   "name": "oneyearxuzhou",
+  "main": "index.js",
   "compatibility_date": "2025-12-09",
-  "assets": [
-    {
-      "name": "index.html",
-      "path": "index.html"
-    },
-    {
-      "name": "annual.html",
-      "path": "annual.html"
-    }
-  ],
+  "assets": {
+    "directory": ".",
+    "binding": "ASSETS",
+    "include": [
+      "index.html",
+      "annual.html",
+      "assets/**"
+    ],
+    "exclude": [
+      "index.js",
+      "wrangler.jsonc",
+      "package.json",
+      "package-lock.json",
+      "deploy.sh",
+      "requirements.txt",
+      "app.py",
+      "travel_records.db",
+      "**/*.log",
+      "deploy/**"
+    ]
+  },
   "kv_namespaces": [
     {
       "binding": "CFBLOG",

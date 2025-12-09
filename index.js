@@ -1,78 +1,62 @@
-// Cloudflare Workers 后端代码
-addEventListener('fetch', event => {
-  event.respondWith(handleRequest(event.request));
-});
+// Cloudflare Workers 后端代码（模块语法，支持静态资源绑定和 KV）
+export default {
+  async fetch(request, env) {
+    const url = new URL(request.url);
+    const path = url.pathname;
 
-async function handleRequest(request) {
-  const url = new URL(request.url);
-  const path = url.pathname;
-  
-  // 静态文件服务
-  if (path.startsWith('/assets/') || path === '/index.html' || path === '/annual.html') {
-    return await serveStatic(request);
-  }
-  
-  // API路由
-  if (path.startsWith('/api/records')) {
-    return await handleApiRecords(request);
-  }
-  
-  // 根路径重定向到index.html
-  if (path === '/') {
-    return Response.redirect(new URL('/index.html', request.url), 302);
-  }
-  
-  // 默认返回404
-  return new Response('Not Found', { status: 404 });
-}
+    // API 路由
+    if (path.startsWith('/api/records')) {
+      return await handleApiRecords(request, env);
+    }
 
-async function serveStatic(request) {
-  const url = new URL(request.url);
-  
-  try {
-    // 在Cloudflare Workers中，静态文件会被自动添加到assets中
-    // 我们可以直接获取请求的URL路径
-    return await fetch(request);
-  } catch (error) {
-    return new Response('File not found', { status: 404 });
-  }
-}
+    // 根路径重定向到首页
+    if (path === '/') {
+      return Response.redirect(new URL('/index.html', request.url), 302);
+    }
 
-async function handleApiRecords(request) {
+    // 静态资源交给 ASSETS 处理
+    const assetResponse = await env.ASSETS.fetch(request);
+    if (assetResponse.status !== 404) {
+      return assetResponse;
+    }
+
+    // 默认返回 404
+    return new Response('Not Found', { status: 404 });
+  }
+};
+
+async function handleApiRecords(request, env) {
   const url = new URL(request.url);
   const method = request.method;
   
   // 获取所有记录
   if (method === 'GET') {
-    return await getAllRecords();
+    return await getAllRecords(env);
   }
   
   // 创建记录
   if (method === 'POST') {
-    return await createRecord(request);
+    return await createRecord(request, env);
   }
   
   // 删除记录
   if (method === 'DELETE') {
     const recordId = url.pathname.split('/').pop();
-    return await deleteRecord(recordId);
+    return await deleteRecord(recordId, env);
   }
   
   return new Response('Method Not Allowed', { status: 405 });
 }
 
-async function getAllRecords() {
+async function getAllRecords(env) {
   try {
     const records = [];
-    
-    // 遍历KV命名空间中的所有记录
-    const iterator = CFBLOG.list();
-    for await (const key of iterator) {
-      if (key.name.startsWith('record_')) {
-        const value = await CFBLOG.get(key.name, 'json');
-        if (value) {
-          records.push(value);
-        }
+    const { keys } = await env.CFBLOG.list({ prefix: 'record_' });
+
+    for (const key of keys) {
+      const value = await env.CFBLOG.get(key.name, { type: 'json' });
+      if (value) {
+        records.push(value);
       }
     }
     
@@ -90,7 +74,7 @@ async function getAllRecords() {
   }
 }
 
-async function createRecord(request) {
+async function createRecord(request, env) {
   try {
     // 解析表单数据
     const formData = await request.formData();
@@ -141,7 +125,7 @@ async function createRecord(request) {
     };
     
     // 保存到KV命名空间
-    await CFBLOG.put(record.id, JSON.stringify(record));
+    await env.CFBLOG.put(record.id, JSON.stringify(record));
     
     return new Response(JSON.stringify(record), {
       headers: { 'Content-Type': 'application/json' }
@@ -154,7 +138,7 @@ async function createRecord(request) {
   }
 }
 
-async function deleteRecord(recordId) {
+async function deleteRecord(recordId, env) {
   try {
     if (!recordId || !recordId.startsWith('record_')) {
       return new Response(JSON.stringify({ error: '无效的记录ID' }), {
@@ -164,7 +148,7 @@ async function deleteRecord(recordId) {
     }
     
     // 从KV命名空间中删除记录
-    await CFBLOG.delete(recordId);
+    await env.CFBLOG.delete(recordId);
     
     return new Response(JSON.stringify({ success: true, message: '记录删除成功' }), {
       headers: { 'Content-Type': 'application/json' }
