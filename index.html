@@ -1,0 +1,751 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OneYearXZ | XUZHOU GUIDE</title>
+    <!-- Load Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Tailwind Configuration -->
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        'primary-blue': '#3B82F6', /* 主色调：现代蓝色 */
+                        'secondary-teal': '#14B8A6', /* 辅助色：青绿色 */
+                        'dark-bg': '#0F172A', /* 全局深色背景 */
+                        'dark-card': '#1E293B', /* 深色卡片背景 */
+                        'light-bg': '#F8FAFC', /* 全局浅色背景 */
+                        'light-card': '#FFFFFF', /* 浅色卡片背景 */
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <style>
+        /* Default Styles (Dark Mode) */
+        body {
+            background-color: #0f172a; /* Dark Background */
+            color: #f1f5f9; /* Light Text */
+            transition: background-color 0.5s, color 0.5s; /* Smooth transition for theme change */
+            min-height: 100vh;
+        }
+
+        /* Nav Bar - Glassmorphism in Dark Mode */
+        .glass-nav {
+            background-color: rgba(15, 23, 42, 0.9); /* Dark BG with transparency */
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+        }
+
+        /* Card Styles in Dark Mode */
+        .card-base {
+            background-color: #1e293b; 
+            border: 1px solid #334155; /* Slate-700 Border */
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            transition: all 0.3s ease-in-out;
+        }
+        .card-base:hover {
+            box-shadow: 0 10px 25px -5px rgba(167, 85, 247, 0.2), 0 4px 6px -2px rgba(167, 85, 247, 0.1);
+            transform: translateY(-2px);
+        }
+
+        /* Hero Background with subtle overlay */
+        .hero-bg {
+            background-image: url('https://placehold.co/1200x600/1e293b/94a3b8?text=XUZHOU+E-SPORTS+CITY');
+            background-size: cover;
+            background-position: center;
+        }
+        .hero-overlay {
+            background: linear-gradient(to top, rgba(15, 23, 42, 0.9) 0%, rgba(15, 23, 42, 0.5) 50%, rgba(15, 23, 42, 0.9) 100%);
+        }
+        
+        /* Hide scrollbar for smooth modal */
+        .custom-scrollbar::-webkit-scrollbar { display: none; }
+        .custom-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+        
+        /* ================================================= */
+        /* === 💡 亮色模式样式覆盖 (Light Mode Overrides) === */
+        /* ================================================= */
+
+        body.light-mode {
+            background-color: #f8fafc; /* Lighter Background: Slate-50 */
+            color: #1e293b; /* Darker Text: Slate-800 */
+        }
+        
+        /* Text Color Adjustments for high contrast */
+        body.light-mode .text-gray-400 { color: #64748b; } /* Slate-500/600 for subtle text */
+        body.light-mode .text-gray-500 { color: #475569; } /* Slate-600 */
+        body.light-mode .text-gray-200 { color: #1e293b; } /* Headings/prominent text use Darker Text */
+
+        /* Nav Bar - Crisp White Glass in Light Mode */
+        body.light-mode .glass-nav {
+            background-color: rgba(255, 255, 255, 0.95); /* Near-pure white */
+            color: #1e293b;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08); /* Lighter shadow */
+            border-bottom: 1px solid #e2e8f0; /* Subtle bottom border: Slate-200 */
+        }
+        body.light-mode .glass-nav a { color: #334155; }
+        body.light-mode .glass-nav a:hover { color: #3B82F6; }
+        
+        /* Theme Toggle Button Fix (CSS for light mode default state) */
+        body.light-mode .glass-nav #theme-toggle { 
+            color: #64748b; 
+            background-color: transparent; 
+        }
+        body.light-mode .glass-nav #theme-toggle:hover { 
+            background-color: #f1f5f9; 
+            color: #A755F7; /* Add hover color for better contrast */
+        }
+        
+        /* Card Styles in Light Mode (Pure white + subtle border/shadow for strong separation) */
+        body.light-mode .card-base {
+            background-color: #ffffff; /* Pure white card */
+            border: 1px solid #e2e8f0; /* Slate-200 Border (Thin and subtle) */
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05); /* Soft, light shadow */
+        }
+        body.light-mode .card-base:hover {
+            box-shadow: 0 10px 25px -5px rgba(167, 85, 247, 0.1), 0 4px 6px -2px rgba(167, 85, 247, 0.05);
+        }
+        
+        /* Divider/Border Adjustments */
+        body.light-mode .border-gray-700 { border-color: #e2e8f0; } /* Use Slate-200 for dividers */
+
+        /* Modal Footer */
+        body.light-mode .modal-footer { background-color: #ffffff; border-top-color: #e2e8f0; } /* Pure white footer */
+        
+        /* Hero Image Override */
+        body.light-mode .hero-bg {
+            background-image: url('https://placehold.co/1200x600/e2e8f0/1e293b?text=XUZHOU+DAYTIME+CITY');
+        }
+        body.light-mode .hero-overlay {
+             background: linear-gradient(to top, rgba(248, 250, 252, 0.95) 0%, rgba(248, 250, 252, 0.5) 50%, rgba(248, 250, 252, 0.95) 100%);
+        }
+        body.light-mode .hero-bg .text-7xl { color: #1e293b; } /* Dark text on hero for visibility */
+        body.light-mode .hero-bg .text-white { color: #1e293b; }
+        body.light-mode .hero-bg .text-gray-200 { color: #475569; }
+        body.light-mode .hero-bg .text-gray-300 { color: #64748b; }
+        body.light-mode .hero-bg .shadow-xl { box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05); }
+
+    </style>
+</head>
+
+<body class="font-sans antialiased">
+
+    <!-- Navigation Bar (Header) -->
+    <header class="glass-nav sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center">
+            <div class="flex items-center space-x-3">
+                <!-- Icon and Title -->
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-7 h-7 text-primary-blue">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M15.54 8.44l-4.24-4.24A4 4 0 005 8v8a4 4 0 004 4h4.56l4.24-4.24a4 4 0 000-5.66z" />
+                </svg>
+                <span class="text-2xl font-extrabold tracking-tight text-gray-200">OneYearXZ</span>
+            </div>
+            <!-- Menu Items -->
+            <nav class="hidden md:flex space-x-8 text-sm items-center font-medium text-gray-200">
+                <a href="#stay" class="hover:text-primary-blue transition-colors">精选住宿</a>
+                <a href="#eat" class="hover:text-primary-blue transition-colors">美食特荐</a>
+                <a href="#explore" class="hover:text-primary-blue transition-colors">周边探索</a>
+                <a href="annual.html" class="hover:text-primary-blue transition-colors">年度板块</a>
+                
+                <!-- 💡 主题切换按钮: 优化了 light-mode:hover 效果 -->
+                <button id="theme-toggle" class="p-2 rounded-full text-gray-400 hover:text-primary-blue hover:bg-dark-card transition-all ml-4" onclick="toggleTheme()">
+                    <!-- 月亮图标 (默认暗色模式显示) -->
+                    <svg xmlns="http://www.w3.org/2000/svg" id="moon-icon" viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6">
+                        <path fill-rule="evenodd" d="M9.52 2.378a.75.75 0 01.583.743c0 .193-.058.384-.171.554C8.445 5.56 7.25 7.915 7.25 10.5c0 3.866 3.134 7 7 7a7.001 7.001 0 005.106-2.433c.18-.179.43-.275.69-.275.485 0 .972.316.972.784a1.75 1.75 0 01-1.75 1.75c-4.45 0-8.25-3.322-8.25-7.75 0-3.308 2.05-6.28 4.97-7.254a.75.75 0 01.744-.171.75.75 0 01.583.743z" clip-rule="evenodd" />
+                    </svg>
+                    <!-- 太阳图标 (亮色模式显示) -->
+                    <svg xmlns="http://www.w3.org/2000/svg" id="sun-icon" viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6 hidden">
+                        <path d="M12 2.25a.75.75 0 01.75.75v1.5a.75.75 0 01-1.5 0V3a.75.75 0 01.75-.75zM7.05 5.344a.75.75 0 00-.53.183l-.84.842a.75.75 0 001.06 1.06l.84-.84a.75.75 0 00-.53-1.245zm10.95 0a.75.75 0 00-.53 1.245l.84.84a.75.75 0 001.06-1.06l-.84-.842a.75.75 0 00-.53-.183zM12 8.25a3.75 3.75 0 100 7.5 3.75 3.75 0 000-7.5zm-8.25 3.75a.75.75 0 01.75-.75h1.5a.75.75 0 010 1.5H4.5a.75.75 0 01-.75-.75zM17.25 12a.75.75 0 01.75-.75h1.5a.75.75 0 010 1.5h-1.5a.75.75 0 01-.75-.75zM7.05 18.656a.75.75 0 001.06-1.06l-.84-.84a.75.75 0 00-1.06 1.06l.84.84zm10.95 0a.75.75 0 001.06-1.06l-.84-.84a.75.75 0 00-1.06 1.06l.84.84z" />
+                    </svg>
+                </button>
+                <button class="bg-primary-blue text-white px-4 py-2 rounded-full text-sm hover:bg-opacity-80 transition-colors shadow-lg">查看地图</button>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section id="home" class="hero-bg relative overflow-hidden pt-28 pb-32 text-center rounded-b-3xl mb-16">
+        <div class="absolute inset-0 hero-overlay"></div>
+        
+        <div class="relative z-10 max-w-4xl mx-auto px-4">
+            <h1 class="text-7xl sm:text-8xl font-black mb-6 tracking-tight text-white" style="text-shadow: 0 0 20px rgba(59, 130, 246, 0.7);">
+                <span class="text-primary-blue">OneYearXZ</span>
+            </h1>
+            <p class="text-xl font-light text-gray-300 mb-10 max-w-2xl mx-auto">
+                住顶级电竞房，品地道彭城味，玩转两汉风华。您的专属潮流旅行指南。
+            </p>
+            <div class="flex flex-col sm:flex-row justify-center space-y-4 sm:space-y-0 sm:space-x-6">
+                <button class="bg-primary-blue text-white px-8 py-3 rounded-full text-lg font-semibold hover:ring-4 hover:ring-primary-blue/50 transition-all shadow-xl shadow-primary-blue/40">
+                    预订电竞酒店
+                </button>
+                <!-- **次要按钮（探索美食地图）** -->
+                <button class="bg-dark-card text-gray-200 px-8 py-3 rounded-full text-lg font-semibold hover:bg-opacity-90 hover:ring-4 hover:ring-gray-400/50 transition-all shadow-lg">
+                    探索美食地图
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- 精选住宿 (Stay Section) -->
+    <section id="stay" class="py-12 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <h2 class="text-4xl font-extrabold mb-12 border-l-4 border-primary-blue pl-4 text-gray-200">
+            精选住宿 <span class="text-xl font-normal text-gray-500">/ E-SPORTS STAY</span>
+        </h2>
+
+        <!-- 住宿卡片: 幻克SPACE电竞酒店 -->
+        <div class="card-base rounded-xl overflow-hidden flex flex-col lg:flex-row">
+            <!-- Image Area -->
+            <div class="lg:w-1/2 relative">
+                <!-- Recommendation Tag -->
+                <span class="absolute top-4 left-4 bg-red-600 text-white text-sm font-bold px-4 py-1.5 rounded-full z-10 shadow-lg">
+                    独家推荐
+                </span>
+                <img src="https://placehold.co/600x450/334155/ffffff?text=Esports+Hotel+Room+5-Player" alt="幻克SPACE电竞酒店客房" class="w-full h-full object-cover lg:max-h-[450px] transition-all duration-500 hover:scale-[1.02]">
+            </div>
+
+            <!-- Info Area -->
+            <div class="lg:w-1/2 p-6 sm:p-10 space-y-6">
+                <div class="flex justify-between items-start border-b border-gray-700 pb-4">
+                    <div>
+                        <h3 class="text-3xl font-bold text-primary-blue mb-1">幻克SPACE电竞酒店</h3>
+                        <p class="text-sm text-gray-400">(徐州苏宁广场店)</p>
+                    </div>
+                    <div class="text-right">
+                        <span class="text-4xl font-extrabold text-yellow-400">4.7</span>
+                        <p class="text-xs text-gray-500">235条好评</p>
+                    </div>
+                </div>
+
+                <div class="space-y-4">
+                    <div class="flex items-center text-gray-300">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 mr-2 text-secondary-teal">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M15 10.5a3 3 0 11-6 0 3 3 0 016 0z" />
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1115 0z" />
+                        </svg>
+                        <span class="text-sm">云龙区 青年路171号 (近苏宁广场)</span>
+                    </div>
+                    
+                    <!-- Tags Group - 次要信息标签 -->
+                    <div class="flex flex-wrap gap-2 text-xs font-medium">
+                        <span class="bg-gray-700 text-gray-300 px-3 py-1 rounded-full shadow-inner">RTX 4070S 显卡</span>
+                        <span class="bg-gray-700 text-gray-300 px-3 py-1 rounded-full shadow-inner">外星人显示器</span>
+                        <span class="bg-gray-700 text-gray-300 px-3 py-1 rounded-full shadow-inner">5黑单人床房</span>
+                        <span class="bg-gray-700 text-gray-300 px-3 py-1 rounded-full shadow-inner">50㎡超大空间</span>
+                    </div>
+                </div>
+
+                <div class="border-t border-gray-700 pt-6">
+                    <div class="flex justify-between items-center">
+                        <div class="text-left">
+                            <p class="text-sm text-gray-500 line-through">原价 ¥999/晚</p>
+                            <p class="text-5xl font-extrabold text-red-500 tracking-tight">¥531</p>
+                            <span class="text-sm text-gray-400"> /晚 (人均约¥106)</span>
+                        </div>
+                        <button class="bg-primary-blue text-white px-8 py-3 rounded-xl text-lg font-semibold hover:ring-4 hover:ring-primary-blue/50 transition-all shadow-xl">
+                            立即预订
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 吃在徐州 (Eat Section) -->
+    <section id="eat" class="py-12 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <h2 class="text-4xl font-extrabold mb-12 border-l-4 border-yellow-400 pl-4 text-gray-200">
+            美食特荐 <span class="text-xl font-normal text-gray-500">/ XUZHOU EAT</span>
+        </h2>
+
+        <!-- 胖记海鲜卡片 (主推菜品 & 点单功能) -->
+        <div class="card-base rounded-xl p-6 sm:p-10 mb-16 flex flex-col lg:flex-row gap-8">
+            <!-- 左侧信息区 -->
+            <div class="lg:w-2/3">
+                <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 border-b border-gray-700 pb-4">
+                    <h3 class="text-3xl font-bold text-yellow-500 mb-2 sm:mb-0">胖记原鲜平价小海鲜</h3>
+                    <div class="space-x-3 flex items-center">
+                        <span class="bg-yellow-600 text-white px-3 py-1 rounded-full text-sm font-bold shadow-md">必吃榜</span>
+                        <!-- **标签（夜宵圣地）**：颜色保持高对比度 -->
+                        <span class="bg-secondary-teal text-white px-3 py-1 rounded-full text-sm font-bold shadow-md">夜宵圣地</span>
+                    </div>
+                </div>
+
+                <h4 class="text-xl font-semibold mb-4 text-gray-300">招牌菜品一览</h4>
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm font-medium">
+                    <!-- 次要信息标签：修改 light-mode:bg-white 为 light-mode:bg-gray-100 -->
+                    <span class="bg-gray-700 text-gray-300 px-3 py-2 rounded-lg text-center shadow-inner">海肠捞饭 ¥128</span>
+                    <span class="bg-gray-700 text-gray-300 px-3 py-2 rounded-lg text-center shadow-inner">椒盐鱿鱼 ¥48</span>
+                    <span class="bg-gray-700 text-gray-300 px-3 py-2 rounded-lg text-center shadow-inner">葱油鸟贝 ¥58</span>
+                    <span class="bg-gray-700 text-gray-300 px-3 py-2 rounded-lg text-center shadow-inner">辣炒花甲 ¥28</span>
+                </div>
+
+                <p class="text-base text-gray-400 mt-6 leading-relaxed">
+                    徐州夜宵圣地之一，新鲜小海鲜种类繁多，性价比高。想品尝地道又过瘾的宵夜，现在就来点单计算清单吧！
+                </p>
+
+                <!-- **主操作按钮（开启点单计算器）**：新增 light-mode:hover 效果和更强的阴影 -->
+                <button onclick="showModal()" class="mt-8 bg-secondary-teal text-white px-10 py-3.5 rounded-full text-lg font-semibold 
+                                                     hover:bg-secondary-teal/90 light-mode:hover:bg-secondary-teal/80 transition-all 
+                                         shadow-xl shadow-secondary-teal/50 light-mode:shadow-lg light-mode:shadow-secondary-teal/30 
+                                                     w-full sm:w-auto">
+                    👉 开启点单计算器
+                </button>
+            </div>
+
+            <!-- 右侧图片区 -->
+            <div class="lg:w-1/3 flex flex-col justify-center items-center">
+                <img src="https://placehold.co/400x250/334155/ffffff?text=Spicy+Seafood+Platter+Placeholder" alt="海鲜大盘" class="w-full h-auto rounded-xl object-cover shadow-2xl">
+            </div>
+        </div>
+        
+        <!-- Food Card Group (其他特色美食) -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <!-- Card 1: 文滨鱿鱼 -->
+            <div class="card-base rounded-xl p-6 flex items-start gap-5">
+                <div class="w-1/3 flex-shrink-0">
+                    <img src="https://placehold.co/150x120/334155/ffffff?text=Grilled+Squid" alt="文滨鱿鱼" class="w-full h-32 object-cover rounded-lg shadow-md">
+                </div>
+                <div class="flex-1">
+                    <div class="flex justify-between items-center mb-2">
+                        <h4 class="text-xl font-bold text-primary-blue">文滨鱿鱼</h4>
+                        <span class="bg-yellow-600 text-white text-xs font-bold px-2 py-0.5 rounded-full">必吃榜</span>
+                    </div>
+                    <p class="text-sm text-gray-400 mb-3 light-mode:text-gray-500">
+                        铁板鱿鱼是必点，洋葱与鱿鱼的完美搭配，酱汁浓郁，口感Q弹。
+                    </p>
+                    <div class="flex justify-between items-center">
+                        <p class="text-sm font-medium text-gray-300 light-mode:text-gray-700">推荐：铁板特制鱿鱼</p>
+                        <!-- **次要按钮（地图定位 +）**：修改 light-mode:bg-white 为 light-mode:bg-gray-100 -->
+                        <button class="bg-gray-700 text-white light-mode:bg-gray-100 light-mode:text-gray-700 light-mode:border light-mode:border-gray-300 px-3 py-1 rounded-full text-xs hover:bg-primary-blue hover:text-white transition-all">地图定位 +</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Card 2: 小胡炸串/什一特色 -->
+            <div class="card-base rounded-xl p-6 flex items-start gap-5">
+                <div class="w-1/3 flex-shrink-0">
+                    <img src="https://placehold.co/150x120/334155/ffffff?text=Fried+Skewers" alt="小胡炸串" class="w-full h-32 object-cover rounded-lg shadow-md">
+                </div>
+                <div class="flex-1">
+                    <div class="flex justify-between items-center mb-2">
+                        <h4 class="text-xl font-bold text-primary-blue">小胡炸串 / 什一特色</h4>
+                        <span class="bg-secondary-teal text-white text-xs font-bold px-2 py-0.5 rounded-full">特色炸串</span>
+                    </div>
+                    <p class="text-sm text-gray-400 mb-3 light-mode:text-gray-500">
+                        虽然外观朴实，但味道很绝。招牌炒辣椒头，一口入魂，让人根本停不下来。
+                    </p>
+                    <div class="flex justify-between items-center">
+                        <p class="text-sm font-medium text-gray-300 light-mode:text-gray-700">推荐：炒辣椒头</p>
+                        <!-- **次要按钮（地图定位 +）**：修改 light-mode:bg-white 为 light-mode:bg-gray-100 -->
+                        <button class="bg-gray-700 text-white light-mode:bg-gray-100 light-mode:text-gray-700 light-mode:border light-mode:border-gray-300 px-3 py-1 rounded-full text-xs hover:bg-primary-blue hover:text-white transition-all">地图定位 +</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- 探索周边 (Explore Section) -->
+    <section id="explore" class="py-12 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <h2 class="text-4xl font-extrabold mb-12 border-l-4 border-secondary-teal pl-4 text-gray-200">
+            周边探索 <span class="text-xl font-normal text-gray-500">/ CULTURAL EXPLORE</span>
+        </h2>
+
+        <!-- 周边景点卡片组 -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <!-- Card 1: 云龙湖 -->
+            <div class="relative rounded-xl overflow-hidden shadow-xl group cursor-pointer transition-transform hover:scale-[1.03]">
+                <img src="https://placehold.co/400x320/004d40/ffffff?text=Yunlong+Lake+Sunset" alt="云龙湖夕阳" class="w-full h-80 object-cover transform transition-all duration-500 group-hover:scale-110">
+                <div class="absolute inset-0 bg-black/60 transition-colors group-hover:bg-black/40"></div>
+                <div class="absolute bottom-0 left-0 p-6 text-white z-10">
+                    <h3 class="text-2xl font-bold mb-2">云龙湖</h3>
+                    <p class="text-sm text-gray-300">
+                        徐州的标志性景点。三面环山，一面临城。不仅适合散步，更有日落时的绝美景色。
+                    </p>
+                </div>
+            </div>
+
+            <!-- Card 2: 徐州博物馆 -->
+            <div class="relative rounded-xl overflow-hidden shadow-xl group cursor-pointer transition-transform hover:scale-[1.03]">
+                <img src="https://placehold.co/400x320/334155/ffffff?text=Xuzhou+Museum+Exhibit" alt="徐州博物馆展品" class="w-full h-80 object-cover transform transition-all duration-500 group-hover:scale-110">
+                <div class="absolute inset-0 bg-black/60 transition-colors group-hover:bg-black/40"></div>
+                <div class="absolute bottom-0 left-0 p-6 text-white z-10">
+                    <h3 class="text-2xl font-bold mb-2">徐州博物馆</h3>
+                    <p class="text-sm text-gray-300">
+                        “金缕玉衣”、“汉代兵马俑”馆藏丰富，了解这座古都的历史之匙。
+                    </p>
+                    <p class="text-xs text-secondary-teal mt-2 font-semibold">推荐指数: 5星</p>
+                </div>
+            </div>
+
+            <!-- Card 3: 龟山汉墓 -->
+            <div class="relative rounded-xl overflow-hidden shadow-xl group cursor-pointer transition-transform hover:scale-[1.03]">
+                <img src="https://placehold.co/400x320/5d4037/ffffff?text=Guishan+Han+Tomb" alt="龟山汉墓入口" class="w-full h-80 object-cover transform transition-all duration-500 group-hover:scale-110">
+                <div class="absolute inset-0 bg-black/60 transition-colors group-hover:bg-black/40"></div>
+                <div class="absolute bottom-0 left-0 p-6 text-white z-10">
+                    <h3 class="text-2xl font-bold mb-2">龟山汉墓</h3>
+                    <p class="text-sm text-gray-300">
+                        东方金字塔，工程浩大，气势磅礴。探索千年之谜，感受古代工匠的鬼斧神工。
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- 路线地图 (Map Section) -->
+    <section id="map" class="py-12 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <h2 class="text-4xl font-extrabold mb-8 border-l-4 border-primary-blue pl-4 text-gray-200 light-mode:text-gray-900">
+            旅行路线地图
+        </h2>
+        
+        <!-- Map Placeholder Area -->
+        <div class="relative card-base rounded-xl overflow-hidden min-h-[500px]">
+            <!-- Legend (图例) -->
+            <div class="absolute top-4 right-4 bg-black/60 backdrop-blur-sm p-4 rounded-lg flex space-x-4 text-sm z-20 shadow-lg border border-gray-700">
+                <div class="flex items-center space-x-1">
+                    <span class="inline-block w-3 h-3 rounded-full bg-primary-blue"></span>
+                    <span class="font-medium">酒店</span>
+                </div>
+                <div class="flex items-center space-x-1">
+                    <span class="inline-block w-3 h-3 rounded-full bg-yellow-500"></span>
+                    <span class="font-medium">美食</span>
+                </div>
+                <div class="flex items-center space-x-1">
+                    <span class="inline-block w-3 h-3 rounded-full bg-secondary-teal"></span>
+                    <span class="font-medium">景点</span>
+                </div>
+            </div>
+            
+            <!-- Map Placeholder Content -->
+            <!-- 占位图随主题切换，保持对比度 -->
+            <img src="https://placehold.co/1200x500/0f172a/94a3b8?text=Xuzhou+Map+Placeholder" alt="徐州地图" class="w-full h-full object-cover light-mode:hidden">
+            <img src="https://placehold.co/1200x500/e2e8f0/1e293b?text=Xuzhou+Map+Placeholder" alt="徐州地图" class="w-full h-full object-cover hidden light-mode:block">
+            
+            <div class="absolute inset-0 bg-black/50 light-mode:bg-white/50 flex items-center justify-center text-3xl text-gray-100 light-mode:text-gray-900 font-bold">
+                [路线地图占位区]
+            </div>
+        </div>
+    </section>
+
+
+    <!-- Footer -->
+    <footer class="mt-24 py-10 text-center text-gray-500 text-sm bg-dark-card border-t border-gray-700 shadow-inner">
+        <p>&copy; 2025 oneyearxuzhou @linx</p>
+        <p class="mt-2">-lzx wb zzh lzq xcd-</p>
+    </footer>
+
+    <!-- ============================================== -->
+    <!-- 点餐模态框 (Order Modal) -->
+    <!-- ============================================== -->
+    <div id="order-modal" class="hidden fixed inset-0 bg-black/80 z-[100] flex items-end sm:items-center justify-center p-0 sm:p-4" onclick="handleOutsideClick(event)">
+        <!-- 模态卡片主体 -->
+        <div class="card-base rounded-t-2xl sm:rounded-xl max-w-3xl w-full max-h-[90vh] sm:max-h-[80vh] flex flex-col relative">
+            
+            <!-- 头部信息 -->
+            <div class="p-6 sm:p-8 flex justify-between items-center border-b border-gray-700 pb-4">
+                <div>
+                    <h3 class="text-3xl font-bold text-yellow-500">徐州胖记点餐清单</h3>
+                    <p class="text-sm text-gray-500">请选择您需要的数量，系统将自动计算总价。</p>
+                </div>
+                <!-- 关闭按钮 -->
+                <button onclick="hideModal()" class="text-gray-400 hover:text-primary-blue transition-colors p-2 rounded-full hover:bg-gray-700">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-7 h-7">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                </button>
+            </div>
+
+            <!-- 菜单列表区域 - 可滚动 -->
+            <div class="flex-grow overflow-y-auto custom-scrollbar p-6 sm:p-8 pb-20" id="menu-items-container">
+                <!-- JS will render menu items here -->
+            </div>
+
+            <!-- 底部结算栏 (固定在底部) -->
+            <div class="fixed bottom-0 left-0 right-0 sm:static bg-dark-card modal-footer p-4 sm:p-6 border-t border-gray-700 shadow-2xl z-10">
+                <!-- 实时消息框 -->
+                <div id="order-message" class="p-4 mb-3 rounded-lg bg-green-900 text-green-300 hidden text-sm" role="alert"></div>
+
+                <div class="flex flex-col sm:flex-row justify-between items-center">
+                    <div class="flex items-baseline mb-4 sm:mb-0">
+                        <span class="text-lg text-gray-400 mr-2">订单总计：</span>
+                        <span id="total-price" class="text-4xl font-extrabold text-red-500">¥0.00</span>
+                    </div>
+                    
+                    <button id="submit-order-btn" onclick="submitOrder()" class="w-full sm:w-1/2 lg:w-1/3 bg-secondary-teal text-white px-8 py-3.5 rounded-full text-lg font-bold hover:bg-teal-500 transition-all shadow-xl shadow-secondary-teal/50">
+                        确认点单 (生成清单)
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- ============================================== -->
+    <!-- /点餐模态框 (Order Modal) -->
+    <!-- ============================================== -->
+
+    <script>
+        // 菜单数据
+        const menu = [
+            { id: 'haichang', name: '海肠捞饭', price: 128 },
+            { id: 'youyu', name: '椒盐鱿鱼', price: 48 },
+            { id: 'haixian', name: '酱汁小海鲜', price: 48 },
+            { id: 'niaobei', name: '葱油鸟贝', price: 58 },
+            { id: 'huajia', name: '辣炒花甲', price: 28 },
+            { id: 'chaofan', name: '海鲜炒饭', price: 38 },
+            { id: 'xie', name: '蒜心炒梭子蟹腿', price: 56 },
+            { id: 'shachong', name: '五香辣沙虫', price: 58 },
+            { id: 'lajiao', name: '炒辣椒头', price: 18 },
+            { id: 'kele', name: '冰镇可乐 (大)', price: 15 }
+        ];
+
+        // 获取 DOM 元素
+        const body = document.body;
+        const modal = document.getElementById('order-modal');
+        const menuContainer = document.getElementById('menu-items-container');
+        const totalPriceDisplay = document.getElementById('total-price');
+        const orderMessage = document.getElementById('order-message');
+        const moonIcon = document.getElementById('moon-icon');
+        const sunIcon = document.getElementById('sun-icon');
+        
+        // ==============================================
+        // 主题切换逻辑
+        // ==============================================
+
+        /**
+         * 切换主题模式（亮色/暗色）
+         */
+        function toggleTheme() {
+            // 检查当前是否为亮色模式
+            const isLightMode = body.classList.toggle('light-mode');
+            
+            // 更新 localStorage 存储用户的偏好
+            localStorage.setItem('theme', isLightMode ? 'light' : 'dark');
+            
+            // 切换图标显示
+            updateThemeIcons(isLightMode);
+
+            // 重新计算总价并刷新消息框样式
+            calculateTotal();
+            if (!orderMessage.classList.contains('hidden')) {
+                // 重新渲染消息框以应用新的主题颜色
+                submitOrder(); 
+            }
+        }
+
+        /**
+         * 根据当前主题状态更新图标
+         * @param {boolean} isLight - 是否为亮色模式
+         */
+        function updateThemeIcons(isLight) {
+            if (isLight) {
+                moonIcon.classList.add('hidden');
+                sunIcon.classList.remove('hidden');
+            } else {
+                moonIcon.classList.remove('hidden');
+                sunIcon.classList.add('hidden');
+            }
+        }
+
+        /**
+         * 初始化主题：从 localStorage 读取偏好
+         */
+        function initializeTheme() {
+            const savedTheme = localStorage.getItem('theme');
+            
+            // 如果存储了亮色模式，则应用它
+            // 优先级：用户存储 > 系统默认（暗色）
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+            
+            if (savedTheme === 'light' || (savedTheme === null && !prefersDark)) {
+                body.classList.add('light-mode');
+                updateThemeIcons(true);
+            } else {
+                updateThemeIcons(false);
+            }
+        }
+
+        // ==============================================
+        // 点餐模态框逻辑
+        // ==============================================
+
+        /**
+         * 显示点餐模态框
+         */
+        function showModal() {
+            modal.classList.remove('hidden');
+            calculateTotal(); 
+            orderMessage.classList.add('hidden');
+        }
+
+        /**
+         * 隐藏点餐模态框
+         */
+        function hideModal() {
+            modal.classList.add('hidden');
+        }
+
+        /**
+         * 处理点击模态框外部区域的事件
+         */
+        function handleOutsideClick(event) {
+            // 检查点击事件是否发生在 modal 元素本身上（而不是其子元素上）
+            const isChildOfModalContent = event.target.closest('.max-w-3xl');
+            if (event.target === modal && !isChildOfModalContent) {
+                hideModal();
+            }
+        }
+        
+        /**
+         * 更新指定菜单项的数量
+         * @param {string} id - 菜单项的唯一 ID
+         * @param {number} delta - 数量的变化值 (+1 或 -1)
+         */
+        function updateQuantity(id, delta) {
+            const input = document.getElementById(`qty-${id}`);
+            let quantity = parseInt(input.value, 10);
+            
+            quantity += delta;
+            
+            if (quantity < 0) {
+                quantity = 0; // 数量不能为负
+            }
+            
+            input.value = quantity;
+            
+            // 实时更新数量显示
+            document.getElementById(`display-qty-${id}`).textContent = quantity;
+
+            calculateTotal(); // 重新计算总价
+        }
+
+
+        /**
+         * 动态生成菜单项的 HTML 结构，使用加减按钮。
+         */
+        function renderMenu() {
+            let html = '';
+            menu.forEach(item => {
+                // 使用 data-price 和 id 存储价格和唯一标识符
+                html += `
+                    <div class="flex justify-between items-center py-4 border-b border-gray-800 last:border-b-0 menu-item" data-price="${item.price}" data-name="${item.name}">
+                        <!-- 菜品信息 -->
+                        <div class="flex flex-col">
+                            <span class="text-base sm:text-lg font-semibold text-gray-200">${item.name}</span>
+                            <span class="text-sm text-yellow-400">¥${item.price.toFixed(2)}</span>
+                        </div>
+                        
+                        <!-- 数量控制 -->
+                        <div class="flex items-center space-x-2">
+                            <!-- 减号按钮 -->
+                            <button onclick="updateQuantity('${item.id}', -1)" 
+                                    class="w-8 h-8 flex items-center justify-center rounded-full transition-all text-xl font-bold 
+                                           bg-gray-700 text-white 
+                                           hover:bg-primary-blue hover:text-white">
+                                −
+                            </button>
+                            
+                            <!-- 数量显示 (非输入框，纯展示) -->
+                            <span id="display-qty-${item.id}" class="w-8 text-center text-lg font-bold text-gray-200">0</span>
+                            
+                            <!-- 隐藏的输入框用于存储实际值和提交数据 -->
+                            <input type="hidden" id="qty-${item.id}" value="0" min="0" class="quantity-input">
+
+                            <!-- 加号按钮 -->
+                            <button onclick="updateQuantity('${item.id}', 1)" 
+                                    class="w-8 h-8 flex items-center justify-center bg-secondary-teal rounded-full hover:bg-teal-500 transition-all text-xl font-bold text-white">
+                                +
+                            </button>
+                        </div>
+                    </div>
+                `;
+            });
+            menuContainer.innerHTML = html;
+        }
+
+        /**
+         * 计算所有选中菜单项的总价。
+         */
+        function calculateTotal() {
+            let total = 0;
+            
+            menu.forEach(item => {
+                const quantityInput = document.getElementById(`qty-${item.id}`);
+                const price = item.price;
+                
+                let quantity = parseInt(quantityInput.value, 10);
+                
+                if (isNaN(quantity) || quantity < 0) {
+                    quantity = 0;
+                }
+                
+                total += price * quantity;
+            });
+            
+            totalPriceDisplay.textContent = `¥${total.toFixed(2)}`;
+            orderMessage.classList.add('hidden');
+        }
+
+        /**
+         * 确认点餐并显示清单信息。
+         */
+        function submitOrder() {
+            let orderSummary = '';
+            let orderTotal = 0;
+            let orderCount = 0;
+
+            menu.forEach(item => {
+                const price = item.price;
+                const quantityInput = document.getElementById(`qty-${item.id}`);
+                const quantity = parseInt(quantityInput.value, 10);
+
+                if (quantity > 0) {
+                    const itemTotal = price * quantity;
+                    orderSummary += `· ${item.name} (x${quantity}) - ¥${itemTotal.toFixed(2)}\n`;
+                    orderTotal += itemTotal;
+                    orderCount++;
+                }
+            });
+
+            const isLightMode = body.classList.contains('light-mode');
+
+            if (orderCount === 0) {
+                // 错误消息样式
+                const errorBg = isLightMode ? 'bg-red-100' : 'bg-red-900';
+                const errorText = isLightMode ? 'text-red-800' : 'text-red-300';
+                orderMessage.innerHTML = '您还没有点任何东西哦，请选择数量后再确认。';
+                orderMessage.className = `p-4 mb-3 rounded-lg text-sm border ${errorBg} ${errorText}`;
+            } else {
+                // 成功消息样式
+                const successBg = isLightMode ? 'bg-green-100' : 'bg-green-900';
+                const successText = isLightMode ? 'text-green-800' : 'text-green-300';
+                const messageBorder = isLightMode ? 'border-green-300' : 'border-green-700';
+
+                const summaryHtml = `
+                    <div class="font-bold mb-2">🎉 点餐成功！以下是您的订单清单：</div>
+                    <pre class="whitespace-pre-wrap text-sm border ${messageBorder} p-3 rounded-md">${orderSummary}</pre>
+                    <div class="font-bold mt-3 text-xl">总金额：<span class="text-red-500">¥${orderTotal.toFixed(2)}</span></div>
+                    <div class="text-xs mt-2 text-gray-400">（此功能仅为演示，实际支付请到店）</div>
+                `;
+                orderMessage.innerHTML = summaryHtml;
+                orderMessage.className = `p-4 mb-3 rounded-lg text-sm ${successBg} ${successText}`;
+            }
+
+            orderMessage.classList.remove('hidden');
+        }
+
+        // 页面加载完成后，渲染菜单、初始化主题并初始化计算
+        window.onload = function() {
+            renderMenu();
+            initializeTheme(); // 页面加载时初始化主题
+            calculateTotal(); 
+        };
+    </script>
+
+</body>
+</html>
