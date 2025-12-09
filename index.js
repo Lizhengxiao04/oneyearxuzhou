@@ -28,11 +28,11 @@ async function handleRequest(request) {
 
 async function serveStatic(request) {
   const url = new URL(request.url);
-  const filePath = url.pathname === '/' ? '/index.html' : url.pathname;
   
   try {
-    const response = await fetch(`file://${filePath}`);
-    return response;
+    // 在Cloudflare Workers中，静态文件会被自动添加到assets中
+    // 我们可以直接获取请求的URL路径
+    return await fetch(request);
   } catch (error) {
     return new Response('File not found', { status: 404 });
   }

@@ -1,0 +1,64 @@
+2025-12-09T10:03:57.848Z	Initializing build environment...
+2025-12-09T10:03:59.567Z	Success: Finished initializing build environment
+2025-12-09T10:04:00.050Z	Cloning repository...
+2025-12-09T10:04:00.867Z	No build output detected to cache. Skipping.
+2025-12-09T10:04:00.867Z	No dependencies detected to cache. Skipping.
+2025-12-09T10:04:00.874Z	Detected the following tools from environment: bun@1.2.15, nodejs@22.16.0
+2025-12-09T10:04:01.055Z	Installing project dependencies: bun install
+2025-12-09T10:04:01.222Z	bun install v1.2.15 (df017990)
+2025-12-09T10:04:01.255Z	Resolving dependencies
+2025-12-09T10:04:03.180Z	Resolved, downloaded and extracted [334]
+2025-12-09T10:04:03.708Z	Saved lockfile
+2025-12-09T10:04:03.709Z	
+2025-12-09T10:04:03.710Z	+ wrangler@3.114.15 (v4.53.0 available)
+2025-12-09T10:04:03.710Z	
+2025-12-09T10:04:03.710Z	61 packages installed [2.53s]
+2025-12-09T10:04:03.982Z	Installing project dependencies: pip install -r requirements.txt
+2025-12-09T10:04:04.898Z	Collecting Flask>=2.0.0 (from -r requirements.txt (line 1))
+2025-12-09T10:04:04.952Z	  Downloading flask-3.1.2-py3-none-any.whl.metadata (3.2 kB)
+2025-12-09T10:04:04.967Z	Collecting blinker>=1.9.0 (from Flask>=2.0.0->-r requirements.txt (line 1))
+2025-12-09T10:04:04.973Z	  Downloading blinker-1.9.0-py3-none-any.whl.metadata (1.6 kB)
+2025-12-09T10:04:04.976Z	Requirement already satisfied: click>=8.1.3 in /opt/buildhome/.local/lib/python3.13/site-packages (from Flask>=2.0.0->-r requirements.txt (line 1)) (8.3.1)
+2025-12-09T10:04:04.985Z	Collecting itsdangerous>=2.2.0 (from Flask>=2.0.0->-r requirements.txt (line 1))
+2025-12-09T10:04:04.988Z	  Downloading itsdangerous-2.2.0-py3-none-any.whl.metadata (1.9 kB)
+2025-12-09T10:04:05.003Z	Collecting jinja2>=3.1.2 (from Flask>=2.0.0->-r requirements.txt (line 1))
+2025-12-09T10:04:05.006Z	  Downloading jinja2-3.1.6-py3-none-any.whl.metadata (2.9 kB)
+2025-12-09T10:04:05.057Z	Collecting markupsafe>=2.1.1 (from Flask>=2.0.0->-r requirements.txt (line 1))
+2025-12-09T10:04:05.061Z	  Downloading markupsafe-3.0.3-cp313-cp313-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl.metadata (2.7 kB)
+2025-12-09T10:04:05.081Z	Collecting werkzeug>=3.1.0 (from Flask>=2.0.0->-r requirements.txt (line 1))
+2025-12-09T10:04:05.088Z	  Downloading werkzeug-3.1.4-py3-none-any.whl.metadata (4.0 kB)
+2025-12-09T10:04:05.100Z	Downloading flask-3.1.2-py3-none-any.whl (103 kB)
+2025-12-09T10:04:05.117Z	Downloading blinker-1.9.0-py3-none-any.whl (8.5 kB)
+2025-12-09T10:04:05.121Z	Downloading itsdangerous-2.2.0-py3-none-any.whl (16 kB)
+2025-12-09T10:04:05.129Z	Downloading jinja2-3.1.6-py3-none-any.whl (134 kB)
+2025-12-09T10:04:05.138Z	Downloading markupsafe-3.0.3-cp313-cp313-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl (22 kB)
+2025-12-09T10:04:05.144Z	Downloading werkzeug-3.1.4-py3-none-any.whl (224 kB)
+2025-12-09T10:04:05.175Z	Installing collected packages: markupsafe, itsdangerous, blinker, werkzeug, jinja2, Flask
+2025-12-09T10:04:05.521Z	
+2025-12-09T10:04:05.521Z	Successfully installed Flask-3.1.2 blinker-1.9.0 itsdangerous-2.2.0 jinja2-3.1.6 markupsafe-3.0.3 werkzeug-3.1.4
+2025-12-09T10:04:05.571Z	Reshimming asdf python...
+2025-12-09T10:04:06.329Z	Executing user deploy command: npx wrangler deploy
+2025-12-09T10:04:07.704Z	
+2025-12-09T10:04:07.705Z	 ⛅️ wrangler 3.114.15 (update available 4.53.0)
+2025-12-09T10:04:07.705Z	-----------------------------------------------
+2025-12-09T10:04:07.705Z	
+2025-12-09T10:04:07.762Z	▲ [WARNING] The version of Wrangler you are using is now out-of-date.
+2025-12-09T10:04:07.763Z	
+2025-12-09T10:04:07.763Z	  Please update to the latest version to prevent critical errors.
+2025-12-09T10:04:07.763Z	  Run `npm install --save-dev wrangler@4` to update to the latest version.
+2025-12-09T10:04:07.763Z	  After installation, run Wrangler with `npx wrangler`.
+2025-12-09T10:04:07.764Z	
+2025-12-09T10:04:07.764Z	
+2025-12-09T10:04:07.768Z	▲ [WARNING] Processing wrangler.jsonc configuration:
+2025-12-09T10:04:07.768Z	
+2025-12-09T10:04:07.769Z	    - Unexpected fields found in assets field: "include"
+2025-12-09T10:04:07.769Z	
+2025-12-09T10:04:07.769Z	
+2025-12-09T10:04:07.801Z	
+2025-12-09T10:04:07.802Z	
+2025-12-09T10:04:07.802Z	Cloudflare collects anonymous telemetry about your usage of Wrangler. Learn more at https://github.com/cloudflare/workers-sdk/tree/main/packages/wrangler/telemetry.md
+2025-12-09T10:04:07.803Z	✘ [ERROR] The `assets` property in your configuration is missing the required `directory` property.
+2025-12-09T10:04:07.803Z	
+2025-12-09T10:04:07.803Z	
+2025-12-09T10:04:07.814Z	🪵  Logs were written to "/opt/buildhome/.config/.wrangler/logs/wrangler-2025-12-09_10-04-07_297.log"
+2025-12-09T10:04:07.939Z	Failed: error occurred while running deploy command
