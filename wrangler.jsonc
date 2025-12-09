@@ -2,8 +2,7 @@
   "name": "oneyearxuzhou",
   "compatibility_date": "2025-12-09",
   "assets": {
-    "directory": ".",
-    "exclude": ["node_modules/**/*", "travel_records.db", "uploads/**/*", "*.pyc", "__pycache__/**/*"]
+    "include": ["index.html", "annual.html"]
   },
   "kv_namespaces": [
     {
